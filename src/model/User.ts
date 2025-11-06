@@ -18,11 +18,11 @@ import mongoose ,{Document,Mongoose,Schema} from "mongoose";
         }
     })
 
-    export interface user extends Document{
-        email:String,
-        userName:String,
-        password:String,
-        verifyCode:String,
+    export interface User extends Document{
+        email:string,
+        userName:string,
+        password:string,
+        verifyCode:string,
         isVerified:Boolean,
         isAcceptingMessages:Boolean,
         verifyCodeExpiry:Date,
@@ -30,7 +30,7 @@ import mongoose ,{Document,Mongoose,Schema} from "mongoose";
         
     }
 
-    const userSchema : Schema<user> = new mongoose.Schema({
+    const userSchema : Schema<User> = new mongoose.Schema({
         email:{
             type: String,
            required :[ true,"Email is required"],
@@ -69,5 +69,6 @@ import mongoose ,{Document,Mongoose,Schema} from "mongoose";
         messages:[MessageSchema]
     })
 
-    const UserModel = (mongoose.models.user as mongoose.Model<user>) || mongoose.model<user>("User",userSchema)
-    
+const  UserModel = (mongoose.models.User as mongoose.Model<User>) || mongoose.model<User>("User",userSchema)
+ 
+export default UserModel;
