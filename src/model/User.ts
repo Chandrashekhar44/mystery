@@ -20,7 +20,7 @@ import mongoose ,{Document,Mongoose,Schema} from "mongoose";
 
     export interface User extends Document{
         email:string,
-        userName:string,
+        username:string,
         password:string,
         verifyCode:string,
         isVerified:Boolean,
@@ -37,7 +37,7 @@ import mongoose ,{Document,Mongoose,Schema} from "mongoose";
            unique:true,
            match:[/.+\@.+\..+/,"Input a valid email ID"]
         },
-        userName:{
+        username:{
             type : String,
             required:[true,"Username is required"],
             unique:true,
