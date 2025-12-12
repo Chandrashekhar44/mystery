@@ -9,13 +9,14 @@ import { Button } from "@react-email/components";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { toast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import { error } from "console";
 
 
 
 export default function SignInForm() {
     const router = useRouter()
+    const {toast} = useToast();
 
     const form = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
