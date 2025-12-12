@@ -9,6 +9,8 @@ import { Button } from "@react-email/components";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { toast } from "@/components/ui/use-toast";
+import { error } from "console";
 
 
 
@@ -33,8 +35,18 @@ export default function SignInForm() {
 
         if (result?.error) {
             if (result.error == "CredentialsSignin") {
+                toast({
+                    title:'Login failed',
+                    description:'Incorrect username or password',
+                    variant:  'destructive'
+                })
 
             } else {
+                toast({
+                    title:'Error',
+                    description:result.error,
+                    variant:  'destructive'
+                })
 
             }
         }
