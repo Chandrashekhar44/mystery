@@ -129,7 +129,7 @@ export async function SignupForm(){
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <Input {...field} name="email" />
-                  <p className='text-muted text-gray-400 text-sm'>We will send you a verification code</p>
+                  <p className='text-muted  text-sm'>We will send you a verification code</p>
                   <FormMessage />
                 </FormItem>
               )}
