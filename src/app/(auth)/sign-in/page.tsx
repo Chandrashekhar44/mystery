@@ -1,4 +1,4 @@
-
+'use client'
 import { useRouter } from "next/navigation";
 import z from "zod";
 import { useForm } from "react-hook-form";

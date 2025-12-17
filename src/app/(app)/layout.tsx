@@ -1,17 +1,23 @@
-'use client ';
+
 
 import Navbar from "@/components/Navbar";
+import  Provider  from "@/app/Provider";
 
 interface RootLayoutProps{
     children : React.ReactNode
 }
 
 
-export default async function RootLayout({children} :RootLayoutProps){
+export default  function RootLayout({children} :RootLayoutProps){
    return(
-    <div className="flex flex-col min-h-screen">
+   
+     <div className="flex flex-col min-h-screen">
+        <Provider>
         <Navbar />
         {children}
+        </Provider>
     </div>
+  
+
    )
 }

@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from 'axios'
 import {useDebounce} from 'use-debounce'
@@ -15,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {useToast} from "@/components/ui/use-toast"
 
 
-export async function SignupForm(){
+export default async function SignupForm(){
 
     const [username,setUsername] = useState('')
     const [usernameMessage,setUsernameMessage]=useState('')
