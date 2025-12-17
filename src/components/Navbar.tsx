@@ -1,6 +1,5 @@
-"use client";
+'use client';
 import { Button } from "@react-email/components";
-import { User } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
