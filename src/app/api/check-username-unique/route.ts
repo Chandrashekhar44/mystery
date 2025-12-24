@@ -15,7 +15,7 @@ export async function GET(request: Request){
     try {
         const {searchParams} = new URL(request.url)
         const queryParams = {
-            username : searchParams.get('username')
+            username : searchParams.get('username' ) ?? ""
         }
         
         const result  = userNameQuerySchema.safeParse(queryParams)

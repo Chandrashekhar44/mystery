@@ -5,7 +5,7 @@ import UserModel from "@/model/User";
 export async function POST(request:Request){
       await dbConnect();
     try {
-        const {username,verifyCode} =await request.json()
+        const {username,code} =await request.json()
         const decodeComponent = decodeURIComponent(username)
 
         const user = await UserModel.findOne({
@@ -16,11 +16,14 @@ export async function POST(request:Request){
                 success : false,
                 message : "user not found"
             },{
-                status: 400
+                status: 401
             })
         }
 
-        const checkCode = user.verifyCode == verifyCode
+        const checkCode = user.verifyCode == code
+        console.log(user.verifyCode)
+        console.log(code)
+        console.log(checkCode)
         const isCodeExpired = new Date(user.verifyCodeExpiry) > new Date()
 
         if(!checkCode){
@@ -28,14 +31,14 @@ export async function POST(request:Request){
                 success : false,
                 message : "Enter the correct verifycode"
             },{
-                status: 400
+                status: 402
             })
         }else if(!isCodeExpired){
              return Response.json({
                 success : false,
                 message : "Code timeline is expired"
             },{
-                status: 400
+                status: 403
             })
         }else{
             user.isVerified = true
