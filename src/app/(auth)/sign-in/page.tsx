@@ -5,12 +5,11 @@ import { useForm } from "react-hook-form";
 import { signInSchema } from "../../../schemas/signInSchema";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react";
-import { Button } from "@react-email/components";
+import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { toast, useToast } from "@/components/ui/use-toast";
-import { error } from "console";
+import { useToast } from "@/components/ui/use-toast";
 
 
 
@@ -21,7 +20,7 @@ export default function SignInForm() {
     const form = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
-            Identifier: '',
+            identifier: '',
             password: ''
         }
     })
@@ -30,7 +29,7 @@ export default function SignInForm() {
     const onSubmit = async function (data: z.infer<typeof signInSchema>) {
         const result = await signIn('credentials', {
             redirect: false,
-            identifier: data.Identifier,
+            identifier: data.identifier,
             password: data.password
         })
 
@@ -71,7 +70,7 @@ export default function SignInForm() {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
-                        name="Identifier"
+                        name="identifier"
                         control={form.control}
                         render={({ field }) => (
                             <FormItem>

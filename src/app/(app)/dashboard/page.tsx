@@ -108,7 +108,8 @@ const handleSwitchChange = async () =>{
      <div></div>;
     }
 
-    const {username} = session?.user as User
+    const username = session?.user as User
+    console.log(username)
     const baseUrl = `${window.location.protocol}//${window.location.host}`;
     const profileUrl = `${baseUrl}/u/${username}`
 
@@ -179,3 +180,5 @@ const handleSwitchChange = async () =>{
       </div>
     </div>
   );}
+
+  export default UserDashboard;

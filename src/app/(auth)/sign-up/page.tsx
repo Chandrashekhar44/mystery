@@ -1,136 +1,66 @@
 'use client'
-import { useEffect, useState } from "react";
-import axios, { AxiosError } from 'axios'
-import {useDebounce} from 'use-debounce'
-import { ApiResponse } from "@/types/ApiResponse";
-import { signUpSchema } from "@/schemas/signUpSchema";
-import z from "zod";
+
 import { useRouter } from "next/navigation";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { signInSchema } from "../../../schemas/signInSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2} from 'lucide-react'
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {useToast} from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 
+export default function SignInForm() {
+  const router = useRouter();
+  const { toast } = useToast();
 
-export default async function SignupForm(){
-
-    const [username,setUsername] = useState('')
-    const [usernameMessage,setUsernameMessage]=useState('')
-    const [isCheckingUsername,setIsCheckingUsername] = useState(false)
-    const [isSubmitting,setIsSubmitting] = useState(false)
-    const debouncedUsername = useDebounce(username,500)
-
-    const form = useForm<z.infer<typeof signUpSchema>>({
-        resolver:zodResolver(signUpSchema),
-        defaultValues:{
-            username:'',
-            email:'',
-            password:''
-        }
-    })
-    
-
-    useEffect(()=>{
-        setIsCheckingUsername(true)
-        setUsernameMessage('')
-        const checkUsername = async ()=> { 
-            if(debouncedUsername){
-      
-        try {
-           const response = await axios.get(`/api/check-username-unique?username=${debouncedUsername}`)
-           setUsernameMessage(response.data.message)
-        } catch (error) {
-            const axiosError = error as AxiosError<ApiResponse>
-            setUsernameMessage(axiosError.response?.data.message ?? 'Error while checking Username')
-            
-        }finally{
-            setIsCheckingUsername(false)
-
-        }
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      identifier: '',
+      password: ''
     }
-    }
-        
-        checkUsername()
-    },[debouncedUsername])
+  });
 
-    const router = useRouter()
-    const {toast} = useToast();
-    const onSubmit = async(data : z.infer<typeof signUpSchema>) =>{
-        setIsSubmitting(true)
-        try {
-             const response = await axios.post('/api/sign-up',data)
-             console.log(response.data.message)
-             router.replace(`/verify/${username}`)
-          
-             toast({
-                title:'success',
-                description:response.data.message
-             })
-             setIsSubmitting(false)
-        } catch (error) {
-            const axiosError = error as AxiosError<ApiResponse>
-            console.log(axiosError.response?.data.message)
-             toast({
-                variant:'destructive',
-                title:'Signup failed',
-                description:axiosError.response?.data.message
-             })
-             setIsSubmitting(false)
-        }
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    const result = await signIn("credentials", {
+      redirect: false,
+      identifier: data.identifier,
+      password: data.password,
+    });
+
+    if (result?.error) {
+      toast({
+        title: "Login failed",
+        description: "Incorrect username or password",
+        variant: "destructive",
+      });
+      console.log("Login error:", result.error);
+      return;
     }
 
-   return (
+    router.replace("/dashboard");
+  };
+
+  return (
     <div className="flex justify-center items-center min-h-screen bg-gray-800">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Join True Feedback
-          </h1>
-          <p className="mb-4">Sign up to start your anonymous adventure</p>
+          <h1 className="text-4xl font-extrabold mb-6">Welcome Back</h1>
+          <p>Sign in to continue</p>
         </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
-              name="username"
+              name="identifier"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <Input
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setUsername(e.target.value);
-                    }}
-                  />
-                  {isCheckingUsername && <Loader2 className="animate-spin" />}
-                  {!isCheckingUsername && usernameMessage && (
-                    <p
-                      className={`text-sm ${
-                        usernameMessage === 'Username is unique'
-                          ? 'text-green-500'
-                          : 'text-red-500'
-                      }`}
-                    >
-                      {usernameMessage}
-                    </p>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="email"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <Input {...field} name="email" />
-                  <p className='text-muted  text-sm'>We will send you a verification code</p>
+                  <FormLabel>Email / Username</FormLabel>
+                  <Input {...field} />
                   <FormMessage />
                 </FormItem>
               )}
@@ -142,28 +72,23 @@ export default async function SignupForm(){
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
-                  <Input type="password" {...field} name="password" />
+                  <Input type="password" {...field} />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className='w-full' disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Please wait
-                </>
-              ) : (
-                'Sign Up'
-              )}
+
+            <Button className="w-full" type="submit">
+              Sign In
             </Button>
           </form>
         </Form>
+
         <div className="text-center mt-4">
           <p>
-            Already a member?{' '}
-            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
-              Sign in
+            Not a member yet?{" "}
+            <Link href="/sign-up" className="text-blue-600">
+              Sign up
             </Link>
           </p>
         </div>

@@ -1,4 +1,3 @@
-
 'use client'
 import { verifySchema } from "@/schemas/verifySchema";
 import { ApiResponse } from "@/types/ApiResponse";
@@ -8,12 +7,12 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useToast } from '@/components/ui/use-toast';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@react-email/components";
+import { Button } from "@/components/ui/button";
 
-export async function verifyAccount(){
+export default  function verifyAccount(){
 
     const params = useParams<{username :string}>()
     const {toast} = useToast();
@@ -21,6 +20,9 @@ export async function verifyAccount(){
 
     const form = useForm<z.infer<typeof verifySchema>>({
         resolver:zodResolver(verifySchema),
+        defaultValues:{
+          code : ''
+        }
     })
 
     const onSubmit = async(data : z.infer<typeof verifySchema>) =>{
