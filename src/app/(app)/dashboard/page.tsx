@@ -25,7 +25,8 @@ const handleDeleteMessage = (messageId : string) => {
      setMessages( messages.filter((message)=> message._id.toString() != messageId))
 };
 
-const {data : session} = useSession()
+const {data : session,status} = useSession()
+
 
 const form = useForm({
     resolver : zodResolver(MessageSchema)
@@ -108,9 +109,20 @@ const handleSwitchChange = async () =>{
      <div></div>;
     }
 
-    const username = session?.user as User
+    if(status == "loading"){
+  return <p>Loading...</p>
+}
+
+if(!session?.user){
+  return <p> NOT AUTHENTICATED</p>
+}
+//This page could not be found   http://localhost:3000/u/shekhar
+
+    const {username} = session?.user! as User
     console.log(username)
-    const baseUrl = `${window.location.protocol}//${window.location.host}`;
+    const baseUrl =
+  typeof window !== "undefined"? `${window.location.protocol}//${window.location.host}`: "";
+
     const profileUrl = `${baseUrl}/u/${username}`
 
     const copyToClipboard = ()=>{

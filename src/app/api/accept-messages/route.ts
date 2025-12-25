@@ -1,16 +1,20 @@
 import dbConnect from "@/lib/dbConnect";
 import {getServerSession} from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]/options";
-import { User } from "next-auth";
 import UserModel from "@/model/User";
-import { success } from "zod";
+import { authOptions } from "../auth/[...nextauth]/options";
 
 
 
 export async function POST(request :Request){
-    dbConnect();
+    await dbConnect();
 
    const session = await getServerSession(authOptions);
+   if (!session?.user) {
+    return Response.json(
+      { success: false, message: "Not authenticated" },
+      { status: 404 }
+    );
+  }
    const user = session?.user;
 
    if(!session || !session.user){
@@ -18,7 +22,7 @@ export async function POST(request :Request){
         success:false,
         message :"Not authenticated"
       },{
-        status : 401
+        status : 402
       })
    }
 
@@ -61,10 +65,23 @@ export async function POST(request :Request){
 
 }
 
+
+
+
+
+
+
+
+
 export async function GET(request : Request){
-     dbConnect()
+    await  dbConnect()
 
     const session = await getServerSession(authOptions);
+    if (!session?.user?._id) {
+    return Response.json(
+      { success: false, message: "Not authenticated" },
+      { status: 405 }
+    );}
     const user = session?.user;
 
     if(!session || !user){
@@ -72,7 +89,7 @@ export async function GET(request : Request){
           success: false,
           message : "Not authenticated"     
         },{
-            status : 401
+            status : 406
         })
     }
 
