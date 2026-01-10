@@ -20,7 +20,7 @@
     "@radix-ui/react-toast": "^1.2.15",
     "@react-email/components": "^0.5.7",
     "@uidotdev/usehooks": "^2.4.1",
-    "ai": "^5.0.92",
+    "ai": "^5.0.119",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",

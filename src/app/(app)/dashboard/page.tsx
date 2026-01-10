@@ -1,10 +1,9 @@
 'use client'
 import { useCallback, useEffect, useState } from "react"
 import { Message } from "@/model/User"
-import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MessageSchema } from "@/schemas/messageSchema";
+import { AcceptMessageSchema } from "@/schemas/acceptMessageSchema";
 import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
 import { toast } from "@/components/ui/use-toast";
@@ -29,7 +28,7 @@ const {data : session,status} = useSession()
 
 
 const form = useForm({
-    resolver : zodResolver(MessageSchema)
+    resolver : zodResolver(AcceptMessageSchema)
 }) 
 
 const {setValue,watch,register} = form
@@ -152,7 +151,6 @@ if(!session?.user){
 
       <div className="mb-4">
         <Switch
-          {...register('acceptMessages')}
           checked={acceptMessages}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
@@ -192,5 +190,4 @@ if(!session?.user){
       </div>
     </div>
   );}
-
   export default UserDashboard;
