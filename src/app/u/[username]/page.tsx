@@ -13,7 +13,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
-import { Toast } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
 import { ApiResponse } from "@/types/ApiResponse";
 import {Textarea} from  '@/components/ui/textarea';
 
@@ -36,7 +36,7 @@ export default function Sendmessage (){
         isLoading:isSuggestLoading,
         error
     } = useCompletion({
-        api:'/api/suggest-messages',
+        api:'/api/suggest-message',
         initialCompletion: initialMessageString
     })
 
@@ -60,7 +60,7 @@ export default function Sendmessage (){
                 username,
             })
 
-            Toast({
+            toast({
                 title:response.data.message,
                 variant:'default',
             })
@@ -69,7 +69,7 @@ export default function Sendmessage (){
         } catch (error) {
             const axiosError = error as AxiosError<ApiResponse>
 
-             Toast({
+             toast({
                 title:'Error',
                 variant:'destructive',
             })
@@ -82,7 +82,7 @@ export default function Sendmessage (){
     const fetchSuggestedMessages = async ()=>{
         try {
             
-            complete('');
+            complete('suggest');
         } catch (error) {
             console.error('Error fetching messages',error)
         }

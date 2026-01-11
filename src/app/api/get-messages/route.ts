@@ -27,7 +27,7 @@ export async function GET(request : Request){
         const user = await UserModel.aggregate([
           {  $match :{_id : userId}},
           {$unwind : '$messages'},
-          {$sort :{ 'messages.credateAt' : -1}},
+          {$sort :{ 'messages.createdAt' : -1}},
           {$group :{ _id:'$_id',messages : {$push : '$messages'} }}
         ]).exec()
 
@@ -39,6 +39,14 @@ export async function GET(request : Request){
                 status:200
             })
         }
+
+         return Response.json(
+      {
+        success: true,
+        messages: user[0].messages,
+      },
+      { status: 200 }
+    );
     } catch (error) {
         console.error('An unexpected error occured',error)
          return Response.json({
