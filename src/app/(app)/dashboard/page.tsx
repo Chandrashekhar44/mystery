@@ -88,7 +88,7 @@ useEffect(()=>{
 
 const handleSwitchChange = async () =>{
     try {
-        const response = await axios.post<ApiResponse>('/api/accept-messages',{acceptMessages : !acceptMessages})
+        const response = await axios.post<ApiResponse>('/api/accept-messages',{acceptingMessages : !acceptMessages})
         setValue('acceptMessages' , !acceptMessages)
         toast({
             title:response.data.message,
@@ -115,7 +115,6 @@ const handleSwitchChange = async () =>{
 if(!session?.user){
   return <p> NOT AUTHENTICATED</p>
 }
-//This page could not be found   http://localhost:3000/u/shekhar
 
     const {username} = session?.user! as User
     console.log(username)
