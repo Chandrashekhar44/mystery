@@ -1,13 +1,11 @@
-// authOptions.ts
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 
-// Define what your authorize function returns
 interface AuthUser {
-  id: string; // required by NextAuth
+  id: string; 
   _id: string;
   email: string;
   username: string;

@@ -21,9 +21,15 @@ import {Textarea} from  '@/components/ui/textarea';
 const specialChar = '||';
 
 const initialMessageString =  "What's your favorite movie?||Do you have any pets?||What's your dream job?";
-const parseStringMessages = (messageString : string) : string[] =>{
-    return messageString.split(specialChar);
-}
+const parseStringMessages = (messageString: string): string[] => {
+  if (!messageString) return [];
+
+  return messageString
+    .split(specialChar)
+    .map((msg) => msg.trim())
+    .filter(Boolean);
+};
+
 
 export default function Sendmessage (){
 
@@ -31,14 +37,16 @@ export default function Sendmessage (){
     const username = params.username;
 
     const {
-        complete,
-        completion,
-        isLoading:isSuggestLoading,
-        error
-    } = useCompletion({
-        api:'/api/suggest-message',
-        initialCompletion: initialMessageString
-    })
+  complete,
+  completion,
+  setCompletion,
+  isLoading: isSuggestLoading,
+  error,
+} = useCompletion({
+  api: "/api/suggest-message",
+  initialCompletion: initialMessageString,
+});
+
 
     const form = useForm<z.infer<typeof messageSchema>>({
         resolver:zodResolver(messageSchema),
@@ -78,15 +86,42 @@ export default function Sendmessage (){
             setIsLoading(false);
         }
     }
+const fallbackMessageString =
+  "What's a hobby you've always wanted to try?||If you could travel anywhere, where would you go?||What's something that always makes you smile?";
 
-    const fetchSuggestedMessages = async ()=>{
-        try {
-            
-            complete('suggest');
-        } catch (error) {
-            console.error('Error fetching messages',error)
-        }
-    }
+const fetchSuggestedMessages = async () => {
+  try {
+    const result = await complete("suggest");
+
+    const finalMessages = result || fallbackMessageString;
+    setCompletion(finalMessages);
+
+   if (result) {
+  toast({
+    title: "Suggestions ready",
+    description: "Fresh AI-generated suggestions have been loaded.",
+  });
+} else {
+  toast({
+    title: "Error",
+    description:
+      "Gemini couldn't generate suggestions because the API quota has been exceeded, so backup questions are being shown instead.",
+      variant:"destructive"
+  });
+}
+  } catch (error) {
+    setCompletion(fallbackMessageString);
+
+    toast({
+      title: "Backup suggestions loaded",
+      description:
+        "Gemini AI suggestions are temporarily unavailable, so fallback questions are being shown.",
+    });
+  }
+};
+
+
+
 
 
 

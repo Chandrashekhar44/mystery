@@ -1,27 +1,38 @@
-import { OpenAI } from "openai";
-import Stream from "stream";
-const client = new OpenAI();
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export async function POST(req: Request){
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+
+const fallbackQuestions =
+  "What's a hobby you've always wanted to try?||If you could visit any country, where would you go?||What's something that always makes you smile?";
+
+export async function POST(req: Request) {
   try {
-  const stream = await client.responses.create({
-      model: "gpt-5",
-      input: [
-          {
-              role: "user",
-              content:  "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.",
-          },
-      ],
-      stream: true,
-  });
-console.log(stream);
-  return new Response(stream.toReadableStream(), {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash",
+    });
+
+    const result = await model.generateContent(
+      `Suggest 3 anonymous questions someone can ask a stranger.
+       Return them separated by || with no extra text, numbering, or explanation.`
+    );
+
+    return new Response(result.response.text().trim(), {
+      status: 200,
       headers: {
-        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Type": "text/plain",
       },
     });
-} catch (error : any) {
-   console.error("Suggestion not completed", error);
-    return new Response("Error generating suggestions", { status: 500 });
+  }catch (error: any) {
+  console.warn(
+    `Gemini failed (${error?.status || "unknown"}), using fallback`
+  );
+
+  return new Response(fallbackQuestions, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/plain",
+    },
+  });
 }
+
 }
