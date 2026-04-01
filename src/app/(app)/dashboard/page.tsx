@@ -21,7 +21,11 @@ const [isSwitchLoading,setIsSwitchLoading] = useState(false);
 const [isLoading,setIsLoading] = useState(false);
 
 const handleDeleteMessage = (messageId : string) => {
-     setMessages( messages.filter((message)=> message._id.toString() != messageId))
+     setMessages( messages.filter((message)=> message._id.toString() != messageId));
+     toast({
+      title:'success',
+      description:'Message deleted  successfully'
+     })
 };
 
 const {data : session,status} = useSession()
@@ -38,7 +42,8 @@ const fetchAcceptMessage = useCallback(async () =>{
     setIsSwitchLoading(true)
     try {
         const response = await axios.get<ApiResponse>('/api/accept-messages')
-        setValue('acceptMessages',response.data.isAcceptingMessages ?? false)
+        setValue('acceptMessages',response.data.isAcceptingMessages ?? false);
+       
 
     } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
@@ -63,6 +68,10 @@ const fetchMessages = useCallback(async (refresh : boolean = false) =>{
    try {
      const response = await axios.get<ApiResponse>('/api/get-messages')
      setMessages(response.data.messages || [])
+      toast({
+      title:'success',
+      description:'Messages  fetched successfully'
+     })
    } catch (error) {
     const axiosError = error as AxiosError<ApiResponse>
     toast({
@@ -144,7 +153,7 @@ if(!session?.user){
             disabled
             className="input input-bordered w-full p-2 mr-2"
           />
-          <Button onClick={copyToClipboard}>Copy</Button>
+          <Button  onClick={copyToClipboard} className="hover:bg-neutral-600">Copy</Button>
         </div>
       </div>
 

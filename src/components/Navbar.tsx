@@ -5,7 +5,7 @@ import Link from "next/link";
 
 
 function Navbar(){
-    const {data : session} = useSession();
+    const {data : session,status} = useSession();
     const user   = session?.user;
 
     return (
@@ -14,20 +14,32 @@ function Navbar(){
         <a href="#" className="text-xl font-bold mb-4 md:mb-0">
           True Feedback
         </a>
-        {session ? (
-          <>
-            <span className="mr-4">
-              Welcome, {user?.username || user?.email}
-            </span>
-            <Button onClick={() => signOut()} className="w-full md:w-auto bg-slate-100 text-black  hover:text-white hover:bg-gray-600" >
-              Logout
-            </Button>
-          </>
-        ) : (
-          <Link href="/sign-in">
-            <Button className="w-full md:w-auto bg-slate-100 text-black" >Login</Button>
-          </Link>
-        )}
+       {status === "loading" ? (
+  <Button
+    disabled className="w-full md:w-auto bg-slate-100 text-black"
+  >
+    Loading...
+  </Button>
+) : status === "authenticated" ? (
+  <>
+    <span className="mr-4">
+      Welcome, {user?.username || user?.email}
+    </span>
+    <Button
+      onClick={() => signOut()}
+      className="w-full md:w-auto bg-slate-100 text-black hover:text-white hover:bg-gray-600"
+    >
+      Logout
+    </Button>
+  </>
+) : (
+  <Link href="/sign-in">
+    <Button className="w-full md:w-auto bg-slate-100 text-black hover:text-white hover:bg-gray-600">
+      Login
+    </Button>
+  </Link>
+)}
+
       </div>
     </nav>
   )
