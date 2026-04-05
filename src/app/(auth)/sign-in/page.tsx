@@ -42,7 +42,7 @@ export default function SignInForm() {
                 toast({
                     title:'Login failed',
                     description:'Incorrect username or password',
-                    variant:  'destructive'
+                    variant: "destructive"
                 })
 
             } else {
@@ -114,6 +114,10 @@ export default function SignInForm() {
                         Sign up
                     </Link>
                 </p>
+            </div>
+            <div className="text-center mt-4">
+                <Link href="/forgot-password" className="text-blue-600 hover:text-blue-800">Forgot Password</Link>
+
             </div>
         </div>
     </div>

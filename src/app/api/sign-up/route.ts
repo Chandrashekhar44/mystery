@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
       await user.save();
     } else {
-      user = await UserModel.create({
+      user =await UserModel.create({
         username,
         email,
         password: hashedPassword,
@@ -65,9 +65,12 @@ export async function POST(req: Request) {
         messages: [],
       });
     }
+    const cleanEmail = email.trim().toLowerCase();
+
+
 
     const emailResponse = await sendVerificationEmail(
-      email,
+      cleanEmail,
       verifyCode
     );
 
@@ -89,7 +92,6 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.error("Signup Error:", error);
 
     return NextResponse.json(
       {
