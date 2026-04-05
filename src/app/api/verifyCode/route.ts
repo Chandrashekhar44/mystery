@@ -21,9 +21,7 @@ export async function POST(request:Request){
         }
 
         const checkCode = user.verifyCode == code
-        console.log(user.verifyCode)
-        console.log(code)
-        console.log(checkCode)
+      
         const isCodeExpired = new Date(user.verifyCodeExpiry) > new Date()
 
         if(!checkCode){
