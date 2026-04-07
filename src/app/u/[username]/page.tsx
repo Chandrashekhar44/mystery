@@ -176,27 +176,28 @@ const fetchSuggestedMessages = async () => {
           </Button>
           <p>Click on any message below to select it.</p>
         </div>
-        <Card>
-          <CardHeader>
-            <h3 className="text-xl font-semibold">Messages</h3>
-          </CardHeader>
-          <CardContent className="flex flex-col space-y-4">
-            {error ? (
-              <p className="text-red-500">{error.message}</p>
-            ) : (
-              parseStringMessages(completion).map((message, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  className="mb-2"
-                  onClick={() => handleMessageClick(message)}
-                >
-                  {message}
-                </Button>
-              ))
-            )}
-          </CardContent>
-        </Card>
+       <Card>
+  <CardHeader>
+    <h3 className="text-xl font-semibold">Messages</h3>
+  </CardHeader>
+  <CardContent className="flex flex-col space-y-4 max-h-96 overflow-y-auto">
+    {error ? (
+      <p className="text-red-500">{error.message}</p>
+    ) : (
+      parseStringMessages(completion).map((message, index) => (
+        <Button
+          key={index}
+          variant="outline"
+          className="mb-2 whitespace-normal break-words text-left"
+          onClick={() => handleMessageClick(message)}
+        >
+          {message}
+        </Button>
+      ))
+    )}
+  </CardContent>
+</Card>
+
       </div>
       <Separator className="my-6" />
       <div className="text-center">
