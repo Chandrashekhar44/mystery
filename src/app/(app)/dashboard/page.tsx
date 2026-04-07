@@ -140,33 +140,45 @@ if(!session?.user){
         })
     };
 
-       return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+      return (
+  <div className="my-8 w-full max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+    <div className="bg-white rounded p-6">
       <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
-        <div className="flex items-center">
+        <h2 className="text-lg font-semibold mb-2">
+          Copy Your Unique Link
+        </h2>
+
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <input
             type="text"
             value={profileUrl}
             disabled
-            className="input input-bordered w-full p-2 mr-2"
+            className="input input-bordered w-full p-2"
           />
-          <Button  onClick={copyToClipboard} className="hover:bg-neutral-600">Copy</Button>
+
+          <Button
+            onClick={copyToClipboard}
+            className="hover:bg-neutral-600"
+          >
+            Copy
+          </Button>
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center">
         <Switch
           checked={acceptMessages}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
+
         <span className="ml-2">
           Accept Messages: {acceptMessages ? 'On' : 'Off'}
         </span>
       </div>
+
       <Separator />
 
       <Button
@@ -183,9 +195,10 @@ if(!session?.user){
           <RefreshCcw className="h-4 w-4" />
         )}
       </Button>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         {messages.length > 0 ? (
-          messages.map((message, index) => (
+          messages.map((message) => (
             <MessageCard
               key={message._id.toString()}
               message={message}
@@ -197,5 +210,7 @@ if(!session?.user){
         )}
       </div>
     </div>
-  );}
+  </div>
+)
+;}
   export default UserDashboard;
