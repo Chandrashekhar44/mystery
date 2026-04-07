@@ -12,8 +12,13 @@ import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import axios from "axios";
 
-
+type ResendVerificationResponse = {
+  success: boolean;
+  message: string;
+  username: string;
+};
 
 export default function SignInForm() {
     const router = useRouter()
@@ -36,16 +41,39 @@ export default function SignInForm() {
             identifier: data.identifier,
             password: data.password
         })
+      
 
         if (result?.error) {
-            if (result.error == "CredentialsSignin") {
-                toast({
-                    title:'Login failed',
-                    description:'Incorrect username or password',
-                    variant: "destructive"
-                })
+            if (result.error === "NotVerified") {
+    toast({
+      title: "Account not verified",
+      description: "Please verify your account first.",
+      variant: "destructive",
+    });
 
-            } else {
+   try {
+    const response = await axios.post<ResendVerificationResponse>("/api/resend-verification", {
+      identifier: data.identifier,
+    });
+     console.log(response.data);
+    toast({
+      title: "Verification email sent",
+      description: response.data.message,
+    });
+
+    router.replace(`/verify/${response.data.username}`);
+  } catch (error: any) {
+    toast({
+      title: "Error",
+      description:
+        error.response?.data?.message ||
+        "Failed to send verification email",
+      variant: "destructive",
+    });
+  }
+
+}
+     else {
                 toast({
                     title:'Error',
                     description:result.error,
@@ -79,7 +107,7 @@ export default function SignInForm() {
                         control={form.control}
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Email/Username</FormLabel>
+                                <FormLabel>EmailUsername/</FormLabel>
                                 <Input {...field} />
                                 <FormMessage />
                             </FormItem>
