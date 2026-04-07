@@ -12,6 +12,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+       <head>
+        <title>MysteryMessage</title> 
+        <link rel="icon" href="/favicon.ico" /> 
+        <link rel="apple-touch-icon" href="/favicon.png" /> 
+      </head>
       <body className={inter.className}>
         <Provider>
           {children}
