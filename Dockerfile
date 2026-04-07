@@ -1,3 +1,4 @@
+
 FROM node:20-alpine
 
 WORKDIR /app
@@ -7,8 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN --mount=type=secret,id=openai_api_key \
-    sh -c "export OPENAI_API_KEY=$(cat /run/secrets/openai_api_key) && npm run build"
+RUN npm run build
 
 EXPOSE 3000
 
