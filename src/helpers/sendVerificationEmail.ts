@@ -13,6 +13,12 @@ export default async function sendVerificationEmail(
   verifyCode: string
 ) {
   try {
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+    console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
+
+    await transporter.verify();
+    console.log("Transport verified");
+
     await transporter.sendMail({
       from: `"Anonymous Messaging" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -33,3 +39,4 @@ export default async function sendVerificationEmail(
     return { status: false };
   }
 }
+
