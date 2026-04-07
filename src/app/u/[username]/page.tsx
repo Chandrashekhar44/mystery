@@ -202,9 +202,9 @@ const fetchSuggestedMessages = async () => {
       <Separator className="my-6" />
       <div className="text-center">
         <div className="mb-4">Get Your Message Board</div>
-        <Link href={'/sign-up'}>
-          <Button>Create Your Account</Button>
-        </Link>
+        <Button asChild>
+  <Link href="/sign-up">Create Your Account</Link>
+</Button>
       </div>
     </div>
     )
