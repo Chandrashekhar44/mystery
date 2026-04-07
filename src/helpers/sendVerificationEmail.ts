@@ -14,7 +14,7 @@ export default async function sendVerificationEmail(
 ) {
   try {
     await transporter.sendMail({
-      from: `"My App" <${process.env.EMAIL_USER}>`,
+      from: `"Anonymous Messaging" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Verify Your Email",
       html: `

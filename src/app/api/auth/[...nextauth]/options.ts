@@ -35,20 +35,31 @@ export const authOptions: NextAuthOptions = {
 
         const identifier = credentials.identifier;
 
-        const userDoc = await UserModel.findOne({
-          $or: [{ email: identifier }, { username: identifier }],
-        }).lean();
+       const userDoc = await UserModel.findOne({
+  $or: [{ email: identifier }, { username: identifier }],
+           }).lean();
 
-        console.log("userDoc:", userDoc);
+          if (!userDoc) {
+          throw new Error("UserNotFound");
+       }
 
-        if (!userDoc || !userDoc.password || !userDoc.isVerified) return null;
+      if (!userDoc.password) {
+  throw new Error("NoPassword");
+         }
 
-        const isPasswordCorrect = await bcrypt.compare(
-          credentials.password,
-          userDoc.password
-        );
+       if (!userDoc.isVerified) {
+  throw new Error("NotVerified");
+       }
 
-        if (!isPasswordCorrect) return null;
+     const isPasswordCorrect = await bcrypt.compare(
+  credentials.password,
+  userDoc.password
+    );
+
+      if (!isPasswordCorrect) {
+  throw new Error("InvalidPassword");
+       }
+
 
         return {
           id: userDoc._id.toString(),
