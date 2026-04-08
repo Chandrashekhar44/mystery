@@ -141,25 +141,27 @@ function UserDashboard() {
     }
   };
 
-  if (status === 'loading') {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-10 w-10 animate-spin" />
-      </div>
-    );
-  }
-
- if (status === 'unauthenticated' || !session?.user) {
+ if (status === 'loading') {
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Loader2 className="h-6 w-6 animate-spin" />
+      <Loader2 className="h-10 w-10 animate-spin" />
     </div>
   );
 }
 
+useEffect(() => {
+  if (status === 'unauthenticated') {
+    router.replace('/sign-in');
+  }
+}, [status, router]);
 
-  const { username } = session.user as User;
+if (status === 'unauthenticated') {
+  return null; 
+}
 
+
+
+const username = session?.user?.username;
   const baseUrl =
     typeof window !== 'undefined'
       ? `${window.location.protocol}//${window.location.host}`
