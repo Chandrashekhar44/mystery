@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import {  Loader2 } from "lucide-react";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {useCompletion} from '@ai-sdk/react';
 import { useForm } from "react-hook-form";
@@ -82,6 +81,7 @@ export default function Sendmessage (){
 
              toast({
                 title:'Error',
+                description:`${axiosError.response?.data.message}`,
                 variant:'destructive',
             })
             
