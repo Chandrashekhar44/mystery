@@ -17,12 +17,12 @@ import { Loader2, RefreshCcw } from 'lucide-react';
 import { MessageCard } from '@/components/MessageCard';
 
 function UserDashboard() {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-
   const [messages, setMessages] = useState<Message[]>([]);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
   const form = useForm({
     resolver: zodResolver(AcceptMessageSchema),
@@ -72,7 +72,6 @@ function UserDashboard() {
     }
   }, []);
 
-
   useEffect(() => {
     if (status === 'authenticated' && session?.user) {
       fetchAcceptMessage();
@@ -81,7 +80,6 @@ function UserDashboard() {
   }, [status, session, fetchAcceptMessage, fetchMessages]);
 
   const handleSwitchChange = async () => {
-    setIsSwitchLoading(true);
     try {
       const response = await axios.post<ApiResponse>('/api/accept-messages', {
         acceptingMessages: !acceptMessages,
@@ -95,16 +93,10 @@ function UserDashboard() {
         description: axiosError.response?.data.message ?? 'Failed to update message settings',
         variant: 'destructive',
       });
-    } finally {
-      setIsSwitchLoading(false);
     }
   };
 
-  const handleDeleteMessage = (messageId: string) => {
-    setMessages(prev => prev.filter(msg => msg._id.toString() !== messageId));
-    toast({ title: 'Success', description: 'Message deleted successfully' });
-  };
-   if (status === 'loading') {
+  if (status === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-10 w-10 animate-spin" />
@@ -114,10 +106,8 @@ function UserDashboard() {
 
   if (status !== 'authenticated' || !session?.user) return null;
 
-  const username = session?.user?.username ?? '';
-  const baseUrl = typeof window !== 'undefined'
-    ? `${window.location.protocol}//${window.location.host}`
-    : '';
+  const username = session.user.username;
+  const baseUrl = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : '';
   const profileUrl = `${baseUrl}/u/${username}`;
 
   const copyToClipboard = () => {
@@ -125,13 +115,16 @@ function UserDashboard() {
     toast({ title: 'URL Copied', description: 'Profile URL copied to clipboard successfully' });
   };
 
+  const handleDeleteMessage = (messageId: string) => {
+    setMessages(prev => prev.filter(msg => msg._id.toString() !== messageId));
+    toast({ title: 'Success', description: 'Message deleted successfully' });
+  };
 
   return (
     <div className="my-8 w-full max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
       <div className="bg-white rounded p-6">
         <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
-        {/* Unique link */}
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
@@ -147,26 +140,18 @@ function UserDashboard() {
 
         <Separator />
 
-        <Button
-          className="mt-4"
-          variant="outline"
-          onClick={(e) => { e.preventDefault(); fetchMessages(); }}
-          disabled={isLoading}
-        >
+        <Button className="mt-4" variant="outline" onClick={(e) => { e.preventDefault(); fetchMessages(); }} disabled={isLoading}>
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCcw className="h-4 w-4" />}
         </Button>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {messages.length > 0
-            ? messages.map(message => (
-                <MessageCard
-                  key={message._id.toString()}
-                  message={message}
-                  onMessageDelete={handleDeleteMessage}
-                />
-              ))
-            : <p>No messages to display.</p>
-          }
+          {messages.length > 0 ? (
+            messages.map(message => (
+              <MessageCard key={message._id.toString()} message={message} onMessageDelete={handleDeleteMessage} />
+            ))
+          ) : (
+            <p>No messages to display.</p>
+          )}
         </div>
       </div>
     </div>
