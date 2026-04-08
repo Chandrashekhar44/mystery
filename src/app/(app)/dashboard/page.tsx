@@ -151,9 +151,7 @@ function UserDashboard() {
 
   if (status === 'unauthenticated' || !session?.user) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        Redirecting to sign in...
-      </div>
+      router.replace('/sign-in')
     );
   }
 
