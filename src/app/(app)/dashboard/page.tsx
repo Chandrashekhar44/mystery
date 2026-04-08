@@ -95,8 +95,7 @@ function UserDashboard() {
       });
     }
   };
-
-  if (status === 'loading') {
+ if (status === 'loading' || status === 'unauthenticated') {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-10 w-10 animate-spin" />
@@ -104,7 +103,7 @@ function UserDashboard() {
     );
   }
 
-  if (status !== 'authenticated' || !session?.user) return null;
+  if (!session?.user) return null;
 
   const username = session.user.username;
   const baseUrl = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : '';
