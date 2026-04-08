@@ -205,15 +205,15 @@ const fetchSuggestedMessages = async () => {
       <Separator className="my-6" />
       <div className="text-center">
         <div className="mb-4">Get Your Message Board</div>
-        {!session ? (
-  <Button asChild>
-    <Link href="/sign-up">Create Your Account</Link>
-  </Button>
-) : (
-  <Button onClick={() => router.push("/dashboard")}>
-    Go to Dashboard
-  </Button>
-)}
+         {!session ? (
+        <Button onClick={() => router.replace("/sign-up")}>
+          Create Your Account
+        </Button>
+      ) : (
+        <Button onClick={() => router.replace("/dashboard")}>
+          Go to Dashboard
+        </Button>
+      )}
       </div>
     </div>
     )
