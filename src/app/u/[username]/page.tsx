@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Separator } from "@/components/ui/separator";
 import {  Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {useCompletion} from '@ai-sdk/react';
 import { useForm } from "react-hook-form";
 import  {messageSchema}  from "@/schemas/messageSchema";
@@ -16,6 +16,7 @@ import axios, { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { ApiResponse } from "@/types/ApiResponse";
 import {Textarea} from  '@/components/ui/textarea';
+import { useSession } from "next-auth/react";
 
 
 const specialChar = '||';
@@ -59,6 +60,8 @@ export default function Sendmessage (){
     }
 
     const [isLoading,setIsLoading] = useState(false);
+    const { data: session, status } = useSession();
+    const router = useRouter();
 
     const onSubmit = async(data : z.infer<typeof messageSchema>) =>{
         setIsLoading(true);
@@ -202,9 +205,15 @@ const fetchSuggestedMessages = async () => {
       <Separator className="my-6" />
       <div className="text-center">
         <div className="mb-4">Get Your Message Board</div>
-        <Button asChild>
-  <Link href="/sign-up">Create Your Account</Link>
-</Button>
+        {!session ? (
+  <Button asChild>
+    <Link href="/sign-up">Create Your Account</Link>
+  </Button>
+) : (
+  <Button onClick={() => router.push("/dashboard")}>
+    Go to Dashboard
+  </Button>
+)}
       </div>
     </div>
     )

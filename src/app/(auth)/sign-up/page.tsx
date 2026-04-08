@@ -42,6 +42,7 @@ export default function SignUpForm() {
     },
   });
 
+
   useEffect(() => {
     const checkUsernameUnique = async () => {
       if (!debouncedUsername.trim())return;
