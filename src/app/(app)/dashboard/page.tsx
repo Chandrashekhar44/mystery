@@ -144,16 +144,19 @@ function UserDashboard() {
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-6 w-6 animate-spin" />
+        <Loader2 className="h-10 w-10 animate-spin" />
       </div>
     );
   }
 
-  if (status === 'unauthenticated' || !session?.user) {
-    return (
-      router.replace('/sign-in')
-    );
-  }
+ if (status === 'unauthenticated' || !session?.user) {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <Loader2 className="h-6 w-6 animate-spin" />
+    </div>
+  );
+}
+
 
   const { username } = session.user as User;
 
