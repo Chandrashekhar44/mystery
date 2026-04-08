@@ -104,6 +104,15 @@ function UserDashboard() {
     setMessages(prev => prev.filter(msg => msg._id.toString() !== messageId));
     toast({ title: 'Success', description: 'Message deleted successfully' });
   };
+   if (status === 'loading') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-10 w-10 animate-spin" />
+      </div>
+    );
+  }
+
+  if (status !== 'authenticated' || !session?.user) return null;
 
   const username = session?.user?.username ?? '';
   const baseUrl = typeof window !== 'undefined'
@@ -116,13 +125,6 @@ function UserDashboard() {
     toast({ title: 'URL Copied', description: 'Profile URL copied to clipboard successfully' });
   };
 
-  if (status === 'loading' || !session?.user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-10 w-10 animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <div className="my-8 w-full max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
