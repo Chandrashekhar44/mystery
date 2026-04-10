@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GitHub README
 
-## Getting Started
+````md
+# Anonymous Messaging Platform
 
-First, run the development server:
+A production-ready full-stack application that enables users to receive anonymous messages through a unique public profile URL.
 
+🔗 [Live Demo](https://mystery-beige.vercel.app)
+
+## Screenshots
+
+### Landing Page
+![Landing Page](./screenshots/landingpage.png)
+
+### Sign In Page
+![Sign In Page](./screenshots/signinpage.png)
+
+### Sign Up Page
+![Sign Up Page](./screenshots/signuppage.png)
+
+
+### Anonymous Message Page
+![Anonymous Message Page](./screenshots/messagepage.png)
+
+### Dashboard
+![Dashboard](./screenshots/dashboardpage.png)
+
+
+## Core Features
+- Stateless JWT-based authentication and protected routes using NextAuth Credentials Provider
+- Email verification with OTP and expiry handling
+- Password recovery and reset workflow
+- Public route for anonymous message submission
+- Protected dashboard for viewing and deleting messages
+- Toggle to enable/disable incoming messages
+- AI-powered message suggestion integration
+- Fully responsive UI and Dockerized deployment
+
+## Tech Stack
+- Next.js 15 App Router
+- TypeScript
+- MongoDB + Mongoose
+- NextAuth Credentials Provider
+- Tailwind CSS + shadcn/ui
+- React Hook Form + Zod
+- Nodemailer
+- Docker
+
+## Architecture
+- Stateless JWT authentication using NextAuth with custom `jwt` and `session` callbacks
+- RESTful API routes implemented under `/api/*`
+- Zod-based schema validation on both client and server
+- MongoDB user model with embedded anonymous message subdocuments
+- Reusable component-driven frontend architecture using shadcn/ui
+
+
+## Key API Routes
+| Route | Description |
+|-------|-------------|
+| `/api/sign-up` | Register user and send verification code |
+| `/api/send-message` | Persist anonymous message to database |
+| `/api/get-messages` | Fetch authenticated user's messages |
+| `/api/delete-message/[messageId]` | Delete selected message |
+| `/api/accept-messages` | Update message acceptance state |
+
+## Local Setup
 ```bash
+git clone <repo-link>
+cd mystery
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+````
+
+## Environment Variables
+
+```env
+MONGODB_URI=
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
+EMAIL_USER=
+EMAIL_PASS=
+GEMINI_API_KEY=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Future Enhancements
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* WebSocket-based real-time messaging
+* Rate limiting and spam prevention
+* User analytics and profile customization
+* Dark mode and notification system
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+````
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
