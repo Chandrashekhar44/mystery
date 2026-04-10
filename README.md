@@ -16,7 +16,7 @@ A production-ready full-stack application that enables users to receive anonymou
 ![Sign Up Page](./screenshots/signuppage.png)
 
 ### Anonymous Message Page
-![Anonymous Message Page](./screenshots/messagepage.png)
+![Anonymous Message Page](./screenshots/messagingpage.png)
 
 ### Dashboard
 ![Dashboard](./screenshots/dashboardpage.png)
