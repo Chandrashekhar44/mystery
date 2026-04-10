@@ -1,6 +1,3 @@
-# GitHub README
-
-````md
 # Anonymous Messaging Platform
 
 A production-ready full-stack application that enables users to receive anonymous messages through a unique public profile URL.
@@ -18,13 +15,11 @@ A production-ready full-stack application that enables users to receive anonymou
 ### Sign Up Page
 ![Sign Up Page](./screenshots/signuppage.png)
 
-
 ### Anonymous Message Page
 ![Anonymous Message Page](./screenshots/messagepage.png)
 
 ### Dashboard
 ![Dashboard](./screenshots/dashboardpage.png)
-
 
 ## Core Features
 - Stateless JWT-based authentication and protected routes using NextAuth Credentials Provider
@@ -53,8 +48,11 @@ A production-ready full-stack application that enables users to receive anonymou
 - MongoDB user model with embedded anonymous message subdocuments
 - Reusable component-driven frontend architecture using shadcn/ui
 
+## AI Integration Suggestion
+- Uses Gemini API to generate anonymous message suggestions for users who need inspiration before sending a message.
 
 ## Key API Routes
+
 | Route | Description |
 |-------|-------------|
 | `/api/sign-up` | Register user and send verification code |
@@ -64,12 +62,13 @@ A production-ready full-stack application that enables users to receive anonymou
 | `/api/accept-messages` | Update message acceptance state |
 
 ## Local Setup
+
 ```bash
 git clone <repo-link>
 cd mystery
 npm install
 npm run dev
-````
+```
 
 ## Environment Variables
 
@@ -84,10 +83,7 @@ GEMINI_API_KEY=
 
 ## Future Enhancements
 
-* WebSocket-based real-time messaging
-* Rate limiting and spam prevention
-* User analytics and profile customization
-* Dark mode and notification system
-
-````
-
+- WebSocket-based real-time messaging
+- Rate limiting and spam prevention
+- User analytics and profile customization
+- Dark mode and notification system
